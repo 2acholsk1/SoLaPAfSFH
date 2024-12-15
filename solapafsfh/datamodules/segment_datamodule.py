@@ -33,7 +33,7 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         self.valid_dataset = None
         self.test_dataset = None
 
-    def setup(self):
+    def setup(self, stage):
         dataset_path = Path('data')
         train_path = sorted((dataset_path / 'train' / 'images').glob('*.jpg'))
         

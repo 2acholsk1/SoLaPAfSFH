@@ -6,3 +6,4 @@ neptune
 matplotlib
 torchvision
 scikit-learn
+segmentation-models-pytorch

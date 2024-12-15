@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import albumentations as A
 import albumentations.pytorch.transforms
-from pathlib import Path
-from solapafsfh.datasets.lawn_paving_dataset import LawnAndPavingDataset
+from solapafsfh.datamodules.segment_datamodule import LawnAndPavingDataModule
 
 transform = A.Compose([
     A.Resize(width=512, height=512),
@@ -10,12 +9,12 @@ transform = A.Compose([
     albumentations.pytorch.transforms.ToTensorV2()
 ])
 
-dataset = LawnAndPavingDataset(sorted(Path('data/train/images').glob('*.jpg')), transform)
-
+datamodule = LawnAndPavingDataModule()
+datamodule.setup('fit')
 index = 0
 
 def update_image(index):
-    image, mask = dataset[index]
+    image, mask = datamodule.train_dataset[index]
 
     axes[0].cla()
     axes[1].cla()
@@ -33,7 +32,7 @@ def update_image(index):
 def on_key(event):
     global index
     if event.key == 'right':
-        if index < len(dataset) - 1:
+        if index < len(datamodule.train_dataset) - 1:
             index += 1
     elif event.key == 'left':
         if index > 0:

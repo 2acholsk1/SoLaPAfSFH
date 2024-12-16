@@ -2,8 +2,10 @@ import torch
 import lightning.pytorch as pl
 import segmentation_models_pytorch as smp
 import torchmetrics
+import torch.nn.functional as F
 from typing import List, Optional
 from solapafsfh.metrics.iou_metric import IOUMetric
+from solapafsfh.losses.dice_loss import DiceLoss
 
 class SegmentationModel(pl.LightningModule):
     def __init__(self,
@@ -40,8 +42,10 @@ class SegmentationModel(pl.LightningModule):
         )
         
         match loss_func:
-            case 'MSE':
+            case 'CrossEntropy':
                 self.loss = torch.nn.CrossEntropyLoss()
+            case 'Dice':
+                self.loss = DiceLoss()
             case _:
                 raise NotImplementedError(
                     f'Not supported loss function: {self._loss_func}'
@@ -59,7 +63,7 @@ class SegmentationModel(pl.LightningModule):
         
         self.save_hyperparameters()
 
-    def optimizer_zero_grad(self, epoch, batch_idx, optimizer, optimizer_idx):
+    def optimizer_zero_grad(self, epoch, batch_idx, optimizer):
         optimizer.zero_grad(set_to_none=True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -69,15 +73,15 @@ class SegmentationModel(pl.LightningModule):
         inputs, labels = batch
         labels = labels.long()
         outputs = self.forward(inputs)
-        loss = self.loss(outputs, labels.float())
+        label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
+        loss = self.loss(outputs, label_one_hot)
 
-        self.accuracy.update(outputs, labels)
         if torch.isinf(loss):
             return None
         self.accuracy.update(outputs, labels)
         self.log('train_loss', loss, on_step=True, on_epoch=True, sync_dist=True)
         self.log('train_acc', self.accuracy, prog_bar=True)
-        # self.log_dict(self.train_metrics(outputs, labels))
+        self.log_dict(self.train_metrics(outputs, labels))
         
         return loss
 
@@ -85,13 +89,14 @@ class SegmentationModel(pl.LightningModule):
         inputs, labels = batch
         labels = labels.long()
         outputs = self.forward(inputs)
-        outputs = outputs.squeeze(1)
-        loss = self.loss(outputs, labels)
+        # outputs = outputs.squeeze(1)
+        label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
+        loss = self.loss(outputs, label_one_hot)
 
         self.accuracy.update(outputs, labels)
         self.log('valid_loss', loss, on_step=False, on_epoch=True, sync_dist=True)
         self.log('valid_acc', self.accuracy, prog_bar=True)
-        # self.log_dict(self.valid_metrics(outputs, labels))
+        self.log_dict(self.valid_metrics(outputs, labels))
         
 
     def test_step(self, batch: torch.Tensor, batch_idx: int):
@@ -103,7 +108,7 @@ class SegmentationModel(pl.LightningModule):
         self.accuracy.update(outputs, labels)
         self.log('test_loss', loss, on_step=False, on_epoch=True, sync_dist=True)
         self.log('test_acc', self.accuracy, prog_bar=True)
-        # self.log_dict(self.test_metrics(outputs, labels))
+        self.log_dict(self.test_metrics(outputs, labels))
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self._lr)

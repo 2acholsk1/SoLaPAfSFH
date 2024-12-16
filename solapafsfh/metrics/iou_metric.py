@@ -12,21 +12,17 @@ class IOUMetric(Metric):
         self.add_state('union', torch.zeros(num_classes), dist_reduce_fx='sum')
 
     def update(self, inputs: torch.Tensor, targets: torch.Tensor):
-        assert inputs.shape == targets.shape
-        
         inputs = torch.argmax(inputs, dim=1)
-        inputs = F.one_hot(inputs, num_classes=self._num_classes)
 
-        targets = torch.argmax(targets, dim=1)
-        targets = F.one_hot(targets, num_classes=self._num_classes)
-        
-        targets = torch.flatten(targets, 1)
-        inputs = torch.flatten(inputs, 1)
-        
-        intersection = torch.sum(targets * inputs, dim=1)
-    
-        union = torch.sum(targets, dim=1) + torch.sum(inputs, dim=1) - intersection
-        
+        inputs = F.one_hot(inputs, num_classes=self._num_classes).permute(0, 3, 1, 2)
+        targets = F.one_hot(targets, num_classes=self._num_classes).permute(0, 3, 1, 2)
+
+        inputs = inputs.reshape(-1, self._num_classes)
+        targets = targets.reshape(-1, self._num_classes)
+
+        intersection = torch.sum(inputs * targets, dim=0)
+        union = torch.sum(inputs, dim=0) + torch.sum(targets, dim=0) - intersection
+
         self.intersection += intersection
         self.union += union
 

@@ -3,7 +3,7 @@ import click
 
 @click.command()
 @click.argument('folder_path', type=click.Path(exists=True))
-@click.option('--prefix', default='img', help='Prefiks dla nazw plików (domyślnie "img")')
+@click.option('--prefix', default='img', help='Prefix to names(default "img")')
 def rename_files(folder_path, prefix):
     image_files = []
     mask_files = {}

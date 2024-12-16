@@ -4,6 +4,6 @@ classes:
 - paving
 encoder_name: resnet34
 input_channels: 3
-loss_func: MAE
+loss_func: Dice
 lr: 0.001
 model_name: UNet

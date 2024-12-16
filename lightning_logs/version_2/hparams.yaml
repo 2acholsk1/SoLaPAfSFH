@@ -1,9 +1,0 @@
-classes:
-- background
-- lawn
-- paving
-encoder_name: resnet34
-input_channels: 3
-loss_func: MAE
-lr: 0.001
-model_name: UNet

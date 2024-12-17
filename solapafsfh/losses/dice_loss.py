@@ -8,7 +8,9 @@ class DiceLoss(nn.Module):
         super(DiceLoss, self).__init__()
 
         self.loss = monai.losses.DiceLoss(
-                include_background=True
+                include_background=True,
+                to_onehot_y = True,
+                softmax= True,
             )
 
     def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:

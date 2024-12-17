@@ -73,15 +73,17 @@ class SegmentationModel(pl.LightningModule):
         inputs, labels = batch
         labels = labels.long()
         outputs = self.forward(inputs)
-        label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
-        loss = self.loss(outputs, label_one_hot)
+        # label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
+
+        labels = labels.unsqueeze(1)
+        loss = self.loss(outputs, labels)
 
         if torch.isinf(loss):
             return None
-        self.accuracy.update(outputs, labels)
+        self.accuracy.update(outputs, labels.squeeze())
         self.log('train_loss', loss, on_step=True, on_epoch=True, sync_dist=True)
         self.log('train_acc', self.accuracy, prog_bar=True)
-        self.log_dict(self.train_metrics(outputs, labels))
+        self.log_dict(self.train_metrics(outputs, labels.squeeze()))
         
         return loss
 
@@ -90,25 +92,29 @@ class SegmentationModel(pl.LightningModule):
         labels = labels.long()
         outputs = self.forward(inputs)
         # outputs = outputs.squeeze(1)
-        label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
-        loss = self.loss(outputs, label_one_hot)
+        # label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
+        labels = labels.unsqueeze(1)
+        loss = self.loss(outputs, labels)
 
-        self.accuracy.update(outputs, labels)
+        self.accuracy.update(outputs, labels.squeeze())
         self.log('valid_loss', loss, on_step=False, on_epoch=True, sync_dist=True)
         self.log('valid_acc', self.accuracy, prog_bar=True)
-        self.log_dict(self.valid_metrics(outputs, labels))
+        self.log_dict(self.valid_metrics(outputs, labels.squeeze()))
         
 
     def test_step(self, batch: torch.Tensor, batch_idx: int):
         inputs, labels = batch
         labels = labels.long()
         outputs = self.forward(inputs)
+        # label_one_hot = F.one_hot(labels, num_classes=len(self._classes)).permute(0, 3, 1, 2)
+        labels = labels.unsqueeze(1)
+
         loss = self.loss(outputs, labels)
 
-        self.accuracy.update(outputs, labels)
+        self.accuracy.update(outputs, labels.squeeze())
         self.log('test_loss', loss, on_step=False, on_epoch=True, sync_dist=True)
         self.log('test_acc', self.accuracy, prog_bar=True)
-        self.log_dict(self.test_metrics(outputs, labels))
+        self.log_dict(self.test_metrics(outputs, labels.squeeze()))
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self._lr)

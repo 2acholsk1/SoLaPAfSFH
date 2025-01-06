@@ -9,7 +9,7 @@ transform = A.Compose([
     albumentations.pytorch.transforms.ToTensorV2()
 ])
 
-datamodule = LawnAndPavingDataModule()
+datamodule = LawnAndPavingDataModule('data/')
 datamodule.setup('fit')
 index = 0
 

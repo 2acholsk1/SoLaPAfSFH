@@ -15,10 +15,10 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         
         self.augmentations = A.Compose([
             A.Resize(width=512, height=512),
-            A.HorizontalFlip(p=0.25),
-            A.VerticalFlip(p=0.25),
-            A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            A.RandomRotate90(p=0.25),
+            A.HorizontalFlip(p=1.0),
+            A.VerticalFlip(p=1.0),
+            A.Normalize(mean=[0., 0., 0.], std=[1., 1., 1.]),
+            A.RandomRotate90(p=1.0),
             A.RandomBrightnessContrast(),
             A.RandomGamma(),
             albumentations.pytorch.transforms.ToTensorV2(),
@@ -26,7 +26,7 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         
         self.transforms = A.Compose([
             A.Resize(width=512, height=512),
-            A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            A.Normalize(mean=[0., 0., 0.], std=[1., 1., 1.]),
             albumentations.pytorch.transforms.ToTensorV2(),
         ])
         
@@ -46,10 +46,10 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         self.test_dataset = LawnAndPavingDataset(test_path, self.transforms)
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=32)
+        return DataLoader(self.train_dataset, batch_size=32, num_workers=20)
 
     def val_dataloader(self):
-        return DataLoader(self.valid_dataset, batch_size=32)
+        return DataLoader(self.valid_dataset, batch_size=32, num_workers=20)
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=32)
+        return DataLoader(self.test_dataset, batch_size=32, num_workers=20)

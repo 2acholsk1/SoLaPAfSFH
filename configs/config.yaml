@@ -15,7 +15,7 @@ datamodule:
 trainer:
   resume_from_checkpoint: null
   precision: bf16-mixed
-  max_epochs: 80
+  max_epochs: 100
 
 logger:
   api_key: ${oc.env:NEPTUNE_API_TOKEN}

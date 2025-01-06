@@ -2,8 +2,11 @@ import hydra
 from omegaconf import DictConfig
 import lightning.pytorch as pl
 import lightning.pytorch.loggers
+from lightning.pytorch.callbacks.early_stopping import EarlyStopping
+from lightning.pytorch.callbacks import ModelCheckpoint
 from solapafsfh.datamodules.segment_datamodule import LawnAndPavingDataModule
 from solapafsfh.models.segmentation_model import SegmentationModel
+
 
 def train(config: DictConfig):
     pl.seed_everything(42, workers=True)
@@ -21,14 +24,30 @@ def train(config: DictConfig):
     )
 
     model_summary_callback = pl.callbacks.ModelSummary(max_depth=-1)
+
+    early_stopping_callback = EarlyStopping(
+        monitor="valid_loss",
+        patience=10,
+        mode="min"
+    )
+
+    checkpoint_callback = ModelCheckpoint(
+        monitor="valid_loss",
+        dirpath="./checkpoints",
+        filename="best-checkpoint",
+        save_top_k=1,
+        mode="min"
+    )
+
     logger = lightning.pytorch.loggers.NeptuneLogger(
         project=config.logger.project,
         log_model_checkpoints=False,
+        tags=["solapafsh_1"]
         )
     
     trainer = pl.Trainer(
         logger=logger,
-        callbacks=[model_summary_callback],
+        callbacks=[model_summary_callback, early_stopping_callback, checkpoint_callback],
         accelerator='gpu',
         precision=config.trainer.precision,
         benchmark=True,

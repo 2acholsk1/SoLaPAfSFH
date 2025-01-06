@@ -1,8 +1,8 @@
 
-SoLaPAfSFH - v2 2024-12-15 12:26am
+SoLaPAfSFH - v4 2025-01-05 9:12pm
 ==============================
 
-This dataset was exported via roboflow.com on December 14, 2024 at 11:26 PM GMT
+This dataset was exported via roboflow.com on January 5, 2025 at 8:12 PM GMT
 
 Roboflow is an end-to-end computer vision platform that helps you
 * collaborate with your team on computer vision projects
@@ -17,11 +17,10 @@ visit https://github.com/roboflow/notebooks
 
 To find over 100k other datasets and pre-trained models, visit https://universe.roboflow.com
 
-The dataset includes 100 images.
+The dataset includes 300 images.
 Lawn-paving_areas-other are annotated in PNG Masks For Semantic Segmentation format.
 
 The following pre-processing was applied to each image:
-* Auto-orientation of pixel data (with EXIF-orientation stripping)
 
 No image augmentation techniques were applied.
 

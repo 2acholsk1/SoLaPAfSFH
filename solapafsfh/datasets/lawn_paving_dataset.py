@@ -15,7 +15,6 @@ class LawnAndPavingDataset(Dataset):
 
     def __getitem__(self, index: int) -> tuple[torch.Tensor, int]:
         image_path = self._images_paths[index]
-        print(image_path)
         image = np.asarray(Image.open(image_path).convert('RGB'))
         
         mask_path = image_path.parent.parent / 'masks' / f'{image_path.stem}_mask.png'

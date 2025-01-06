@@ -8,3 +8,5 @@ torchvision
 scikit-learn
 segmentation-models-pytorch
 monai
+hydra-core
+neptune

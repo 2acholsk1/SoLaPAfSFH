@@ -1,0 +1,24 @@
+run_name: null
+data_path: ${hydra:runtime.cwd}/data
+
+model:
+  name: UNet
+  encoder_name: resnet34
+  in_channels: 3
+  classes: ['background', 'lawn', 'paving']
+  loss_func: Dice
+  lr: 1e-3
+
+datamodule:
+  data_path: ${data_path}
+
+trainer:
+  resume_from_checkpoint: null
+  precision: bf16-mixed
+  max_epochs: 100
+
+logger:
+  api_key: ${oc.env:NEPTUNE_API_TOKEN}
+  project: 2acholsk1-workspaces/2acholsk1-project
+  log_model_checkpoints: false
+  name: ${run_name}

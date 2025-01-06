@@ -9,15 +9,16 @@ from torch.utils.data import DataLoader
 from solapafsfh.datasets.lawn_paving_dataset import LawnAndPavingDataset
 
 class LawnAndPavingDataModule(pl.LightningDataModule):
-    def __init__(self):
+    def __init__(self, data_path):
         super().__init__()
+        self._data_path = data_path
         
         self.augmentations = A.Compose([
             A.Resize(width=512, height=512),
-            A.HorizontalFlip(p=0.25),
-            A.VerticalFlip(p=0.25),
+            A.HorizontalFlip(p=1.0),
+            A.VerticalFlip(p=1.0),
             A.Normalize(mean=[0., 0., 0.], std=[1., 1., 1.]),
-            A.RandomRotate90(p=0.25),
+            A.RandomRotate90(p=1.0),
             A.RandomBrightnessContrast(),
             A.RandomGamma(),
             albumentations.pytorch.transforms.ToTensorV2(),
@@ -34,7 +35,7 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         self.test_dataset = None
 
     def setup(self, stage):
-        dataset_path = Path('data')
+        dataset_path = Path(self._data_path)
         train_path = sorted((dataset_path / 'train' / 'images').glob('*.jpg'))
         
         train_path, valid_path = train_test_split(train_path, test_size=0.2, random_state=42)
@@ -45,10 +46,10 @@ class LawnAndPavingDataModule(pl.LightningDataModule):
         self.test_dataset = LawnAndPavingDataset(test_path, self.transforms)
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=32)
+        return DataLoader(self.train_dataset, batch_size=32, num_workers=20)
 
     def val_dataloader(self):
-        return DataLoader(self.valid_dataset, batch_size=32)
+        return DataLoader(self.valid_dataset, batch_size=32, num_workers=20)
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=32)
+        return DataLoader(self.test_dataset, batch_size=32, num_workers=20)

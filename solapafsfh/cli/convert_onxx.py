@@ -26,7 +26,7 @@ def export_model_to_onxx(checkpoint_path: Path, export_model_name: str):
 
     x = torch.rand(1, 3, 512, 512)
     _ = model(x)
-    export_model_name = export_model_name + '.onxx'
+    export_model_name = export_model_name + '.onnx'
     torch.onnx.export(model,
                     x,
                     'onxx_models/'+export_model_name,

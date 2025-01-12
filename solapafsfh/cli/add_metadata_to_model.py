@@ -18,7 +18,7 @@ def metadata_to_model(onxx_model_path: Path, export_model_name: str):
 
     m1 = model.metadata_props.add()
     m1.key = 'model_type'
-    m1.value = json.dumps('UNet')
+    m1.value = json.dumps('Segmentor')
 
     m2 = model.metadata_props.add()
     m2.key = 'class_names'

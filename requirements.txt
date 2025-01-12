@@ -10,6 +10,8 @@ segmentation-models-pytorch
 monai
 hydra-core
 neptune
-onxx
-onxxruntime
-onxxruntime-gpu
+onnx
+onnxruntime
+onnxruntime-gpu
+click
+timm

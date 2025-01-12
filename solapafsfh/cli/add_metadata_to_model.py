@@ -5,10 +5,10 @@ import timm.data
 from pathlib import Path
 
 @click.command
-@click.argument('onxx_model_path', type=click.Path(exists=True, path_type=Path))
+@click.argument('onnx_model_path', type=click.Path(exists=True, path_type=Path))
 @click.option('--export_model_name', type=click.STRING, default='onxx_model_meta')
-def metadata_to_model(onxx_model_path: Path, export_model_name: str):
-    model = onnx.load(onxx_model_path)
+def metadata_to_model(onnx_model_path: Path, export_model_name: str):
+    model = onnx.load(onnx_model_path)
 
     class_names = {
         0: 'background',

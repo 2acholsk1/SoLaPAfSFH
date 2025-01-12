@@ -2,8 +2,8 @@ run_name: null
 data_path: ${hydra:runtime.cwd}/data
 
 model:
-  name: UNet
-  encoder_name: resnet34
+  name: DeepLabV3+
+  encoder_name: efficientnet-b5
   in_channels: 3
   classes: ['background', 'lawn', 'paving']
   loss_func: Dice
@@ -15,7 +15,7 @@ datamodule:
 trainer:
   resume_from_checkpoint: null
   precision: bf16-mixed
-  max_epochs: 100
+  max_epochs: 30
 
 logger:
   api_key: ${oc.env:NEPTUNE_API_TOKEN}

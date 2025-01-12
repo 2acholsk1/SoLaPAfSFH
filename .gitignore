@@ -5,3 +5,4 @@ data/valid
 __pycache__
 *.ckpt
 outputs/
+run_*

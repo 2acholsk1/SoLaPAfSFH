@@ -28,6 +28,14 @@ class SegmentationModel(pl.LightningModule):
         match self._model_name:
             case "UNet":
                 self.network = smp.Unet
+            case "UNetPP":
+                self.network = smp.UnetPlusPlus
+            case "DeepLabV3+":
+                self.network = smp.DeepLabV3Plus
+            case "FPN":
+                self.network = smp.FPN
+            case "PSPNet":
+                self.network = smp.PSPNet
             case _:
                 raise NotImplementedError(
                     f'Not supported model: {self._model_name}'

@@ -34,7 +34,7 @@ def train(config: DictConfig):
     checkpoint_callback = ModelCheckpoint(
         monitor="valid_loss",
         dirpath="./checkpoints",
-        filename="best-checkpoint",
+        filename=config.checkpoints.ckpt_filename,
         save_top_k=1,
         mode="min"
     )

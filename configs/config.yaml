@@ -12,6 +12,9 @@ model:
 datamodule:
   data_path: ${data_path}
 
+checkpoints:
+  ckpt_filename: DeepLabv3+_efficientnet-b5_dice
+
 trainer:
   resume_from_checkpoint: null
   precision: bf16-mixed

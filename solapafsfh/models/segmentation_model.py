@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from typing import List, Optional
 from solapafsfh.metrics.iou_metric import IOUMetric
 from solapafsfh.losses.dice_loss import DiceLoss
+from solapafsfh.losses.focal_dice_loss import FocalDiceLoss
 
 class SegmentationModel(pl.LightningModule):
     def __init__(self,
@@ -54,6 +55,8 @@ class SegmentationModel(pl.LightningModule):
                 self.loss = torch.nn.CrossEntropyLoss()
             case 'Dice':
                 self.loss = DiceLoss()
+            case 'FocalDice':
+                self.loss = FocalDiceLoss()
             case _:
                 raise NotImplementedError(
                     f'Not supported loss function: {self._loss_func}'

@@ -11,7 +11,12 @@ class FocalDiceLoss(nn.Module):
             to_onehot_y=True,
             softmax=True,
         )
-        self.focal_loss = FocalLoss(gamma=gamma)
+        self.focal_loss = FocalLoss(
+            gamma=gamma,
+            include_background=True,
+            to_onehot_y=True,
+            use_softmax=True
+            )
 
     def forward(self, inputs: torch.Tensor, targets: torch.Tensor):
         dice = self.dice_loss(inputs, targets)

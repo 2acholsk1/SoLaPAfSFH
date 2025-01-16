@@ -27,7 +27,7 @@ def train(config: DictConfig):
 
     early_stopping_callback = EarlyStopping(
         monitor="valid_loss",
-        patience=10,
+        patience=20,
         mode="min"
     )
 

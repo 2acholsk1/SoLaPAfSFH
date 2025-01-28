@@ -1,14 +1,6 @@
 # SoLaPAfSFH
-**S**egmentation **o**f **L**awns **a**nd **P**avings **A**rea **f**or **S**ingle **F**amily **H**ouses
-# ZPO Project - Your Deepness Model
-This is a template for a Project.
-Please follow the structure below and address all required points.
-Please put it in a public repository.
-
-AT THE TOP OF THIS README ADD AN IMAGE/GIF WITH EXAMPLE MODEL PREICTION, AS A BANNER
-
-We reecommend making this README pleaseant to read, you can later use it as portfolio `:)`
-
+**S**egmentation **o**f **L**awns **a**nd **P**avings **A**rea **f**or **S**ingle **F**amily **H**ouses\
+<img src="imgs/screen4_mask.png" alt="Image 1" width="600">\
 Main goal of the project was creating a model for segmentation suburbs areas into 3 categories:
 - Lawns
 - Pawing areas
@@ -47,23 +39,48 @@ The information about the encoding can be also found in the dataset in .csv file
 - other instructions to reproduce the training process
 
 ## Results
-- Example images from dataset (diverse), at least 4 images
-- Examples of good and bad predictions, at least 4 images
+
+- Good segmentations\
+As shown below, most pavements are segmented correctly, and trees are not misclassified as lawns.
+<table>
+  <tr>
+    <td><img src="imgs/screen1.png" alt="Image 1" width="400"></td>
+    <td><img src="imgs/screen1_mask.png" alt="Image 2" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="imgs/screen5.png" alt="Image 3" width="400"></td>
+    <td><img src="imgs/screen5_mask.png" alt="Image 4" width="400"></td>
+  </tr>
+</table>
+- Examples of bad segmentations:
+Below are examples of incorrect segmentations. In the first image, lawn is incorrectly segmented on a roof, and in the second, a significant portion of pavement is not segmented.
+<table>
+  <tr>
+    <td><img src="imgs/screen2.png" alt="Image 1" width="400"></td>
+    <td><img src="imgs/screen2_mask.png" alt="Image 2" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="imgs/screen8.png" alt="Image 3" width="400"></td>
+    <td><img src="imgs/screen8_mask.png" alt="Image 4" width="400"></td>
+  </tr>
+</table>
+
+
 - Metrics on the test and train dataset
 
 ## Trained model in ONNX ready for `Deepness` plugin
 
-To export model in ONYX format the script in solapafsfh\cli\convert_onxx.py is provided.
-
-- model uploaded to XXX and a LINK_HERE
-- model have to be in the ONNX format, including metadata required by `Deepness` plugin (spatial resolution, thresholds, ...)
-- name of the script used to convert the model to ONNX and add the metadata to it
+To export model in ONYX format the script in `solapafsfh\cli\convert_onxx.py` is provided.\
+The model is avialable in this repo ine the model section, if you want to use it, just download it and merge two files into one (as shown in the gif below).
 
 
 ## Demo instructions and video
-- a short video of running the model in Deepness (no need for audio), preferably converted to GIF
-- what ortophoto to load in QGIS and what physical place to zoom-in. E.g. Poznan 2022 zoomed-in at PUT campus
-- showing the results of running the model
+How to use the model?\
+Download zipped model avialable in this repo under `SOLAPAFSFH/model`\
+Using 7zip merge the two files into one\
+Use the model in QGIS\
+The model was applied to the "Poznan 2022 aerial orthophoto high resolution" map.\
+<img src="imgs/how_to_use.gif" alt="Image 1" width="400">
 
 ## People
 - Piotr Zacholski

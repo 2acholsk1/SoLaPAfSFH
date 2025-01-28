@@ -3,19 +3,22 @@ data_path: ${hydra:runtime.cwd}/data
 
 model:
   name: DeepLabV3+
-  encoder_name: efficientnet-b5
+  encoder_name: efficientnet-b4
   in_channels: 3
   classes: ['background', 'lawn', 'paving']
-  loss_func: Dice
+  loss_func: FocalDice
   lr: 1e-3
 
 datamodule:
   data_path: ${data_path}
 
+checkpoints:
+  ckpt_filename: DeepLabV3+_efficientnet-b4_focal-dice
+
 trainer:
   resume_from_checkpoint: null
   precision: bf16-mixed
-  max_epochs: 30
+  max_epochs: 100
 
 logger:
   api_key: ${oc.env:NEPTUNE_API_TOKEN}

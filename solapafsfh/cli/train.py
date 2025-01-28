@@ -27,14 +27,14 @@ def train(config: DictConfig):
 
     early_stopping_callback = EarlyStopping(
         monitor="valid_loss",
-        patience=10,
+        patience=20,
         mode="min"
     )
 
     checkpoint_callback = ModelCheckpoint(
         monitor="valid_loss",
         dirpath="./checkpoints",
-        filename="best-checkpoint",
+        filename=config.checkpoints.ckpt_filename,
         save_top_k=1,
         mode="min"
     )

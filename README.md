@@ -70,8 +70,18 @@ Below are examples of incorrect segmentations. In the first image, lawn is incor
 
 ## Trained model in ONNX ready for `Deepness` plugin
 
-To export model in ONYX format the script in `solapafsfh\cli\convert_onxx.py` is provided.\
-The model is avialable in this repo ine the model section, if you want to use it, just download it and merge two files into one (as shown in the gif below).
+To export model in ONXX format the script in `solapafsfh\cli\convert_onxx.py` is provided.\
+The model is avialable in this repo in the model section, if you want to use it, just download it and merge two files into one (as shown in the gif below).
+
+The best results in the table were achieved by the DeepLabV3+ model with the EfficientNet-b5 encoder trained with FocalDice loss. It obtained the highest results on the test set (IoU = 0.68, Accuracy = 0.81) and very high performance on the validation set (IoU = 0.67, Acc = 0.95). The training ended after 42 epochs.
+
+| model_name | encoder_name | loss_func | training-test_iou | training-test_acc | training-valid_iou  | training-valid_acc | training-epoch
+|---------------------------------|-----------------------------------|--------------------------------|---------------------------|---------------------------|----------------------------|----------------------------|------------------------|
+| DeepLabV3+                      | efficientnet-b5                   | FocalDice                       | 0.68                      | 0.81                      | 0.67                       | 0.95                       | 42                  |
+| DeepLabV3+                      | efficientnet-b4                   | FocalDice                       | 0.67                      | 0.80                      | 0.66                       | 0.95                       | 36                     |
+| DeepLabV3+                      | efficientnet-b5                   | Dice                            | 0.66                      | 0.79                      | 0.67                       | 0.94                       | 30                     |
+| DeepLabV3+                      | resnet34                          | FocalDice                       | 0.66                      | 0.79                      | 0.66                       | 0.94                       | 44                     |
+| FPN                             | resnet34                          | FocalDice                       | 0.65                      | 0.79                      | 0.63                       | 0.93                       | 38                     |
 
 
 ## Demo instructions and video

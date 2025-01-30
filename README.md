@@ -96,6 +96,3 @@ The model was applied to the "Poznan 2022 aerial orthophoto high resolution" map
 - Piotr Zacholski
 - Bruno Maruszczak
 - Witold Szerszeń 
-
-## Other information
-Feel free to add other information here.
